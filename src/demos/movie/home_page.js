@@ -111,7 +111,7 @@ class MovieHomePage extends Component {
 					{/* Swiper */}
 					<Swiper {...params} className="slider">
 						<div>
-							<img className="position-absolute fixed-bottom z-index-10" src={require('../../img/spiderman.png')} alt="" width="500" height="auto" />
+							{/* <img className="position-absolute fixed-bottom z-index-10" src={require('../../img/spiderman.png')} alt="" width="500" height="auto" /> */}
 						</div>
 						<div data-bg={{'background': 'linear-gradient(#0075A5,#0B091D)' }}>
 							<img className="position-absolute fixed-bottom z-index-10" src={require('../../img/john_wick.png')} alt="" width="500" height="auto" />
