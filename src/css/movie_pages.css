@@ -1,0 +1,12 @@
+.hero { height: 100vh; padding: 0; display: flex; align-items: center; }
+
+/*swiper*/
+.hero .swiper-container { width: 100%; height: 100%; }
+.hero .swiper-slide-active { opacity: 1; }
+.hero .swiper-slide .title { margin-top: -50px; }
+.title h2 { font-size: 60px; line-height: 45px; font-weight: 700; text-transform: uppercase; color: white; margin: 0; text-shadow: 0 10px 20px rgba(0,0,0,0.9); }
+.title p { margin: 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: normal; font-weight: 300; text-transform: uppercase; letter-spacing: 10px; color: #fff; }
+
+/*movie list section*/
+.movie-list .list .list-item button:focus { outline: none; }
+.gallery-1 { min-height: 350px; }
