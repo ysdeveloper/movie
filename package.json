@@ -24,12 +24,12 @@
     "swiper": "^6.2.0"
   },
   "scripts": {
-    "start": "cross-env AUTOPREFIXER_GRID=autoplace react-scripts start",
-    "build": "cross-env AUTOPREFIXER_GRID=autoplace react-scripts build",
-    "test": "cross-env AUTOPREFIXER_GRID=autoplace react-scripts test",
+    "dev": "react-scripts start",
+    "start": "serve -s build",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
