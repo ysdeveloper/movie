@@ -1,12 +1,116 @@
-.hero { height: 100vh; padding: 0; display: flex; align-items: center; }
+.clickeffect { cursor: pointer; transition: 0.3s ease-in-out; }
+.clickeffect.active,.clickeffect:hover { background: linear-gradient(to right,transparent,rgba(19, 0, 58, 0.8)); }
+.clickeffect:active { transform: scale(0.8); transition: 0.3s ease-in-out; }
 
 /*swiper*/
+.swiper-container { width: 100%; }
+.swiper-wrapper { align-items: center; }
+.swiper-slide { width: auto; overflow: hidden; border: none; border-radius: 15px; }
+
+.hero { height: 100vh; padding: 0; display: flex; align-items: center; overflow: hidden; }
+.hero .big-circle { position: absolute; bottom: -170px; left: 50%; transform: translateX(-50%); height: 950px; width: 950px; border-radius: 100%; box-shadow: 0 -20px 50px rgba(0,0,0,0.8); opacity: 0.3; z-index: 1; }
+.hero .small-circle { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); height: 730px; width: 730px; border-radius: 100%; box-shadow: 0 -20px 50px rgba(0,0,0,0.8); opacity: 0.4; z-index: 0; }
+.hero .charecter-img { width: 700px; }
+.hero .black-panther .charecter-img { width: 950px; }
+
 .hero .swiper-container { width: 100%; height: 100%; }
-.hero .swiper-slide-active { opacity: 1; }
-.hero .swiper-slide .title { margin-top: -50px; }
-.title h2 { font-size: 60px; line-height: 45px; font-weight: 700; text-transform: uppercase; color: white; margin: 0; text-shadow: 0 10px 20px rgba(0,0,0,0.9); }
-.title p { margin: 0; font-family: 'Poppins', sans-serif; font-size: 13px; line-height: normal; font-weight: 300; text-transform: uppercase; letter-spacing: 10px; color: #fff; }
+.hero .swiper-slide h2 { position: absolute; font-size: 120px; line-height: 120px; font-weight: 700; text-transform: uppercase; color: white; margin: 0; text-shadow: 0 10px 20px rgba(0,0,0,0.9); }
+.hero .swiper-slide .title1 { min-width:230px; top: 40%; left: 35%; text-align: right; z-index: -10; transform: translate(-50%,-50%); }
+.hero .swiper-slide .title2 { min-width: 230px; top: 60%; left: 62%; z-index: 10; transform: translate(-50%,-50%); }
+.hero .swiper-slide span { font-family: 'Poppins', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 10px; color: #fff; margin: 0; position: absolute; top: -15%; left: -285%; z-index: -10; }
+
+.bg_circle { background: transparent; opacity: 0.05; border-radius: 100%; height: 400px; width: 400px; position: absolute; top: 100px; left: 100px; border: 60px solid #fff; }
 
 /*movie list section*/
 .movie-list .list .list-item button:focus { outline: none; }
+.home_movie_title { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); }
+.home_movie_title h3 { text-shadow: 0 10px 20px rgba(0,0,0,0.2); font-size: 30px; }
 .gallery-1 { min-height: 350px; }
+
+/* Detail Page Css */
+.detail_hero { color: #B8B8B8; font-size: 16px; font-weight: 500; letter-spacing: 0.5px; display: flex; align-items: flex-end; padding-bottom: 20px; background-attachment: fixed !important; }
+.detail_hero .tags, .detail_hero .sub-details{ display: flex; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+.detail_hero .tags li { font-size: 16px; letter-spacing: 1.25px; font-weight: 500; background: #6600FF; color: #fff; padding: 4px 20px; margin: 0 7px 15px 0; border: none; border-radius: 25px; }
+.detail_hero .sub-details li { font-size: 16px; letter-spacing: 1.25px; font-weight: 500; padding-right: 15px; margin-right: 15px; border-right: 3px solid #B8B8B8; line-height: 15px; }
+.detail_hero .sub-details li:last-child { border-right: 0; margin-right: 0; padding-right: 0; }
+.detail_hero .sub-details li:first-child { color: #6600FF; }
+.detail_hero .videos { height: 200px; display: flex; align-items: center; }
+.detail_hero .videos .swiper-wrapper { height: auto; }
+.detail_hero .videos .swiper-slide { border-radius: 15px; overflow: hidden; position: relative; cursor: pointer; transition: 0.3s ease-in-out; }
+.detail_hero .videos .swiper-slide:before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(transparent,rgba(102,0,255,0.5));}
+.detail_hero .videos .swiper-slide:after { content: '\f04b'; font-size: 20px; color: #fff; font-family: "Font Awesome 5 free"; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+.detail_hero .videos .swiper-slide:hover { transform: scale(1.1); }
+.detail_hero .video-wrapper { position: fixed; top: 0; left: 0; opacity: 0; visibility: hidden; height: 100%; width: 100%; z-index: 1040; background: rgba(0,0,0,0.8); transition: 0.3s ease-in-out; }
+.detail_hero .video-wrapper .videoplayer-wrapper { position: absolute; border-radius: 25px; overflow: hidden; height: 50%; width: 40%; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+.detail_hero .video-wrapper .close_btn { top: 20px; right: 20px; position: absolute; }
+.detail_hero.active .video-wrapper { opacity: 1; visibility: visible; } 
+
+.details_details h5 { line-height: 40px; }
+.details_details p { font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 500; letter-spacing: 0.5px; }
+
+.details_casts { margin: 0; padding: 30px 15px; height: 500px; background: #191919; border-radius: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); overflow-y: scroll; }
+.details_casts li { list-style: none; margin-bottom: 20px; text-align: center; }
+.details_casts li .profile_img { height: 120px; width: 120px; border-radius: 100%; border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.5); overflow: hidden; margin: 0 auto; margin-bottom: 20px; }
+.details_casts li h6 { font-size: 16px; letter-spacing: 1px; }
+.details_casts li h6 span { font-weight: 400; color: #B8B8B8; }
+
+.cast_details .profile_img {  margin: 0 !important; }
+
+@media only screen and (max-width: 1550px) {
+    .hero .big-circle { width: 750px; height: 750px; bottom: -160px; }
+    .hero .small-circle { width: 580px; height: 580px; bottom: -80px; }
+    .hero .charecter-img { width: 500px; }
+    .hero .black-panther .charecter-img { width: 700px; }
+    .hero .swiper-slide h2 { font-size: 90px; line-height: 90px; }
+
+    .detail_hero .videos { height: 150px; }
+}
+
+@media only screen and (max-width: 1280px) {}
+
+@media only screen and (max-width: 1199px) {
+    .hero .swiper-slide .title1 { top: 45% !important; left: 28% !important; }
+    .hero .swiper-slide.john-wick .title1 { left: 34% !important; }
+
+    .details_casts li .profile_img { width: 100px; height: 100px; margin-bottom: 10px; }
+}
+
+@media only screen and (max-width: 991px) {
+    .hero .charecter-img { width: 600px; z-index: 100; }
+    .hero .black-panther .charecter-img { width: 100%; }
+    .hero .swiper-slide .title1 { top: 30% !important; left: 50% !important; }
+    .hero .swiper-slide .title2 { top: 40% !important; left: 50% !important; }
+    .hero .swiper-slide.john-wick .title1 { left: 50% !important; }
+    .hero .small-circle { width: 680px; height: 680px; }
+    .hero .big-circle { width: 950px; height: 950px; }
+
+    .detail_hero { height: 65vh !important; }
+    .detail_hero .video-wrapper .videoplayer-wrapper { height: 35%; width: 80%; }
+}
+
+@media only screen and (max-width: 767px) {
+    .hero { height: 550px; }
+    .hero .charecter-img { width: 90%; }
+    .hero .big-circle { width: 400px; height: 400px; bottom: -70px; }
+    .hero .small-circle { width: 350px; height: 350px; }
+    .hero .swiper-slide h2 { font-size: 60px; line-height: 60px; text-align: center !important; }
+    .hero .swiper-slide .title1 { font-size: 70px; line-height: 70px; top: 25% !important; }
+    .hero .swiper-slide .title2 { font-size: 25px; line-height: 40px; letter-spacing: 0.2px; top: 34% !important; }
+
+    .videoplayer-wrapper .videoplayer { height: 200px !important; }
+
+    .detail_hero { overflow: visible; height: 35vh !important; }
+    .detail_hero .container-fluid { position: absolute; top: 100%; background: #090909; }
+    .all_details { margin-top: 100%; }
+    .detail_hero .videos { height: 100px; }
+    .detail_hero .video-wrapper .videoplayer-wrapper { height: 30%; width: 85%; }
+
+    .details_casts { flex-wrap: nowrap; height: auto; }
+    .details_casts li { margin-bottom: 0; }
+    .details_casts li h6 { font-size: 13px; letter-spacing: 0.5px; }
+    .details_casts li .profile_img { width: 80px; height: 80px; margin-bottom: 5px; }
+}
+
+@media only screen and (max-width: 390px) {
+    .all_details { margin-top: 110%; }
+}

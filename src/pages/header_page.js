@@ -2,7 +2,7 @@ import React,{Component} from 'react'
 import { NavLink } from 'react-router-dom'
 
 // Components
-import Searchbar from '../components/searchbar'
+import {Searchbar} from '../components/searchbar'
 import Button from '../components/button'
 
 class HeaderPage extends Component {

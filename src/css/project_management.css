@@ -1,0 +1,13 @@
+.project-management .navigation li a { color: #232323; position: relative; }
+.project-management .navigation li a i { font-size: 23px; }
+
+/* searchbar */
+.project-management .searchbar input { background: #f7f7f7; border-color: transparent; padding: 10px 30px 10px 25px; }
+.project-management .searchbar input::placeholder { text-transform: capitalize; font-weight: 500; font-size: 14px; color: #CCCCCC; }
+.project-management .searchbar input::-moz-placeholder { text-transform: capitalize; font-weight: 500; font-size: 14px; color: #CCCCCC; }
+.project-management .searchbar input::-webkit-input-placeholder { text-transform: capitalize; font-weight: 500; font-size: 14px; color: #CCCCCC; }
+.project-management .searchbar i { left: auto; right: 25px; top: 47%; color: #232323; }
+
+/* Main */
+.project-management .main { border-radius: 25px; background: #f7f7f7; height: 100%; padding: 30px; }
+.project-management .main .title { font-weight: 700; color: #232323; }

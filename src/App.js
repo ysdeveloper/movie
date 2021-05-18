@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom'
+import { HashRouter, Route, Switch, NavLink } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import './css/app.css'
 
 // Pages
-import HomePage from './pages/home_page'
-import ComponentsPage from './pages/components_page'
-import DemoPage from './pages/demo_page'
 import MovieHomePage from './demos/movie/home_page'
+import MovieDetailPage from './demos/movie/detail_page'
 
 class App extends Component {
 	
@@ -19,7 +18,7 @@ class App extends Component {
 		}
 
 		return (
-		  	<BrowserRouter>
+		  	<HashRouter>
 	  			<header>
 		  			<nav className="d-flex navbar-expand-lg">
 			  			<ul className="menu ml-auto">
@@ -32,9 +31,6 @@ class App extends Component {
 				  				</ul>
 				  			</li>
 				  			<li className="list-item">
-				  				<NavLink to="/demo" activeStyle={style.active}>Demos</NavLink>
-				  			</li>
-				  			<li className="list-item">
 				  				<NavLink to="/components" activeStyle={style.active}>Components</NavLink>
 				  			</li>
 				  			<li className="list-item">
@@ -43,13 +39,13 @@ class App extends Component {
 			  			</ul>
 		  			</nav>
 	  			</header>
-	  			<Switch>
-	  				<Route path="/" component={HomePage} exact />
-	  				<Route path="/demo" component={DemoPage} />
-	  				<Route path="/components" component={ComponentsPage} />
-	  				<Route path="/movie_home_1" component={MovieHomePage} />
-	  			</Switch>
-		  	</BrowserRouter>
+				<AnimatePresence exitBeforeEnter>
+					<Switch>
+						<Route exact path ="/" component={MovieHomePage} />
+						<Route exact path="/movie/:id" component={MovieDetailPage} />
+					</Switch>
+				</AnimatePresence>
+		  	</HashRouter>
 	    );
 	}
 }

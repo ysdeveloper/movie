@@ -1,15 +1,31 @@
 import React from 'react'
+import ReactLoading from 'react-loading'
 
 // Components
 import Gallery from '../components/gallery'
-import MovieCard from '../components/moviecard'
 
 // Data
-import { GalleryData,MovieData } from '../data'
+import { UNSPLASH_API_KEY } from '../data'
 
 class GalleryPage extends React.Component {
+
+	constructor() {
+		super()
+		this.state = {
+			Images: null,
+			Loading: true
+		}
+	}
+
+	componentDidMount() {
+		fetch(`https://api.unsplash.com/search/photos?query=nature&orientation=squarish&per_page=20&client_id=${UNSPLASH_API_KEY}`)
+		.then(result => result.json())
+		.then(data => this.setState({Images: [...data.results], Loading: false}))
+	}
+	
 	render() {
 		return(
+			!this.state.Loading ?
 			<div className="row">
 				<div className="col-12">
 					<h2 className="page-title">Gallery</h2>
@@ -21,9 +37,9 @@ class GalleryPage extends React.Component {
 					</div>
 					<Gallery>
 						{
-							GalleryData.map((item,index) => {
+							this.state.Images.slice(0,10).map((item,index) => {
 								return(
-									<img key={index} className="card" src={require(`../img/${item}`)} alt={item} />	
+									<img key={index} className="card" src={item.urls.small} alt='Photos' />	
 								);
 							})
 						}
@@ -36,19 +52,15 @@ class GalleryPage extends React.Component {
 					</div>
 					<Gallery className="gallery-1">
 						{
-							MovieData.map((item,index) => {
+							this.state.Images.slice(6,15).map((item,index) => {
 								return(
-									<MovieCard 
-										className="moviecard-2 card"
-										key={index}
-										data={item}
-									/>
+									<img key={index} className="card" src={item.urls.small} alt='Photos' />	
 								);
 							})
 						}
 					</Gallery>
 				</div>
-			</div>
+			</div> : <ReactLoading type='bubbles' color='#6900af' height={100} width={100} />
 		);
 	}
 }

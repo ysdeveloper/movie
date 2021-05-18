@@ -1,8 +1,8 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { HashRouter ,Route, Switch } from 'react-router-dom'
 
 // Components
-import Searchbar from '../components/searchbar'
+import {Searchbar} from '../components/searchbar'
 import NavigationLinks from '../components/navigationlinks'
 
 // Pages
@@ -19,15 +19,14 @@ import VideoplayerPage from './videoplayer_page'
 
 function ComponentsPage() {
 	return (
-		<Router>
+		<HashRouter>
 			<div className="container-fluid">
 				<div className="row">
 					<div className="col-3 pl-0">
 						{/* =================Sidebar Start=================*/}
 						<div className="sidebar" style={{'width':260,'height':'100vh','backgroundColor':'#f7f7f7'}}>
-							<div className="logo mb-4">
-								<img src={require('../img/logo.png')} alt="" height="50" width="50" />
-								<h6 className="title alt-font">ysdeveloper</h6>
+							<div className="logo mb-4 mt-3 justify-content-center">
+								<img src={require('../img/mix_logo.png')} alt="" height="auto" width="70" />
 							</div>
 							<Searchbar className="mb-5" placeholder="Search" focusColor="#6900af" />
 							<div className="overflow-auto">
@@ -67,8 +66,7 @@ function ComponentsPage() {
 					</div>
 					<div className="col-6 py-5 px-0">
 						<Switch>
-							<Route path="/components" exact component={SearchbarPage} />
-							<Route path="/components/accordion" component={AccordionPage} />
+							<Route path="/components/accordion" exact={true} component={AccordionPage} />
 							<Route path="/components/button" component={ButtonPage} />
 							<Route path="/components/blogcard" component={BlogcardPage} />
 							<Route path="/components/searchbar" component={SearchbarPage} />
@@ -84,7 +82,7 @@ function ComponentsPage() {
 					</div>
 				</div>
 			</div>
-		</Router>
+		</HashRouter>
 	);
 }
 

@@ -8,19 +8,14 @@ import Overlay from './overlay'
 
 // Format Function
 const format = (seconds) => {
-	if(isNaN(seconds)) {
-		return '00:00'
-	}
+	if(isNaN(seconds)) { return '00:00' }
 
 	const date = new Date(seconds*1000)
 	const hh = date.getUTCHours()
 	const mm = date.getUTCMinutes()
 	const ss = date.getUTCSeconds().toString().padStart(2,"0")
 
-	if(hh) {
-		return `${hh}:${mm.toString().padStart(2,"0")}:${ss}`
-	}
-
+	if(hh) { return `${hh}:${mm.toString().padStart(2,"0")}:${ss}` }
 	return `${mm}:${ss}`
 }
 
@@ -41,39 +36,21 @@ class VideoPlayer extends React.Component {
 		}
 	}
 
-	handleVideoClick = () => {
-		this.setState({
-			controls: true
-		})
-	}
+	handleVideoClick = () => this.setState({ controls: true })
 
-	handleVolumeClick = () => {
-		this.setState({
-			muted: !this.state.muted
-		})
-	}
+	handleVolumeClick = () => this.setState({muted: !this.state.muted})
 
 	handleVolumeChange = (e,value) => {
-		this.setState({
-			volumeLevel: value
-		})
+		this.setState({ volumeLevel: value })
 
 		if(this.state.volumeLevel === 0) {
-			this.setState({
-				muted: true
-			})
+			this.setState({ muted: true })
 		}else {
-			this.setState({
-				muted: false
-			})
+			this.setState({ muted: false })
 		}
 	}
 
-	handlePlay = () => {
-		this.setState({
-			playing: !this.state.playing
-		})
-	}
+	handlePlay = () => this.setState({ playing: !this.state.playing })
 
 	handleBackward = () => {
 		this.player.current.seekTo(this.player.current.getCurrentTime() - 10)
@@ -86,9 +63,7 @@ class VideoPlayer extends React.Component {
 	handleForward = () => {
 		this.player.current.seekTo(this.player.current.getCurrentTime() + 10)
 		this.forward.current.classList.add('fadeInOut')
-		setTimeout(() => {
-			this.forward.current.classList.remove('fadeInOut')
-		},400)
+		setTimeout(() => {this.forward.current.classList.remove('fadeInOut')},400)
 	}
 
 	toggleFullScreen = () => {
@@ -105,32 +80,22 @@ class VideoPlayer extends React.Component {
 
 	handleMouseMove = () => {
 		if(screenfull.isFullscreen) {
-			this.setState({
-				controls: true
-			})
-			setTimeout(() => {
-				this.setState({
-					controls: false
-				})
-			},5000)
+			this.setState({ controls: true })
+			setTimeout(() => {this.setState({ controls: false })},5000)
 		}
 	}
 
-	handleVideoProgress = (value) => {
-		this.setState({
-			played: value.played
-		})
-	}
+	handleVideoProgress = (value) => this.setState({ played: value.played })
 
 	handleSeekChange = (e,value) => {
-		this.setState({
-			played: parseFloat(value/100)
-		})
+		this.setState({ played: parseFloat(value/100) })
 		this.player.current.seekTo(value/100)
 	}
 
-	render() {
+	handleDoubleClick = () => this.setState({ playing: !this.state.playing })
 
+	render() {
+		// STYLE
 		const Style = {
 			seekbar: {
 				color: this.props.themecolor
@@ -143,30 +108,28 @@ class VideoPlayer extends React.Component {
 
 		const currentTime = this.player.current ? this.player.current.getCurrentTime() : "00:00"
 		const duration = this.player.current ? this.player.current.getDuration() : "00:00"
-
 		const elapsedTime = format(currentTime)
 		const totalDuration = format(duration)
 
 		return (
-			<div ref={this.videowrapper} className="videoplayer-wrapper">
+			<div ref={this.videowrapper} className={this.props.className ? `videoplayer-wrapper ${this.props.className}` : 'videoplayer-wrapper' }>
 				<ReactPlayer 
 					ref={this.player}
 					className="videoplayer"
-					url={[
-					    {src: require(`../videos/${this.props.url}`), type: 'video/mp4'}
-					  ]}
-					light={this.props.thumbnail ? require(`../img/${this.props.thumbnail}`) : false }
+					url={this.props.url}
+					light={true}
 					playing={this.state.playing}
 					width="100%"
-					height="100%"
+					height={this.props.height ? this.props.height : '100%'}
 					volume={this.state.volumeLevel/100}
 					muted={this.state.muted}
 					loop
+					controls={this.props.site !== 'youtube' ? false : true}
 					onClick={this.handleVideoClick}
 					onProgress={this.handleVideoProgress}
 					onMouseMove = {this.handleMouseMove} />
-				{(this.state.controls) ?
-					(<div className="controls align-items-center">
+				{(this.state.controls) && this.props.site !== 'youtube' ?
+					(<div className="controls align-items-center" onDoubleClick={this.handleDoubleClick}>
 							{this.props.overlay ? 
 								<Overlay bgColor={this.props.overlay} 
 										 height={this.props.overlayHeight ? this.props.overlayHeight : '100%'} 

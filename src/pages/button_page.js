@@ -95,28 +95,28 @@ class ButtonPage extends React.Component {
 					</div>
 					<Button className="btn-style-4 rounded btn-medium" bgColor="#ff0081" Color="#fff">Click me</Button>
 				</div>	
-				{/* =================Button 5 top=================*/}	
+				{/* =================Button 5 top =================*/}	
 				<div className="col-4 py-20px">	
 					<div>
 						<h6 className="title" style={{color: "#6900af", marginBottom: 10}}>Button 5 top</h6>
 					</div>
 					<Button className="btn-style-5 top btn-medium" bgColor="#6900af" Color="#6900af">Button 5 top</Button>
 				</div>	
-				{/* =================Button 5 bottom=================*/}	
+				{/* =================Button 5 bottom =================*/}	
 				<div className="col-4 py-20px">	
 					<div>
 						<h6 className="title" style={{color: "#6900af", marginBottom: 10}}>Button 5 Bottom</h6>
 					</div>
 					<Button className="btn-style-5 bottom btn-medium" bgColor="#f9a63b" Color="#f9a63b">Button 5 bottom</Button>
 				</div>
-				{/* =================Button with icon=================*/}	
+				{/* =================Button with icon =================*/}	
 				<div className="col-4 py-20px">	
 					<div>
 						<h6 className="title" style={{color: "#6900af", marginBottom: 10}}>Button with icon</h6>
 					</div>
 					<Button className="btn-style-4 btn-medium rounded" bgColor="#6900af" Color="#fff" icon="fa fa-glass">Button</Button>
 				</div>	
-				{/* =================Links=================*/}	
+				{/* ================= Links =================*/}	
 					<div className="col-4 py-20px">	
 						<div>
 							<h6 className="title" style={{color: "#6900af", marginBottom: 10}}>link 1</h6>

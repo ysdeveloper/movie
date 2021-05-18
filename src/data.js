@@ -27,92 +27,22 @@ export const BlogData = [
 	}
 ]
 
-export const MovieData = [
-	{
-		'title1': 'spiderman',
-		'title2':'homecoming',
-		'description':'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt',
-		'actors':'Tom Holland',
-		'year':'2017',
-		'length':'2h 13m',
-		'type':'movie',
-		'img':'spiderman.jpg',
-		'tags':['action','superhero','hindi']
-	},
-	{
-		'title1': 'john wick',
-		'title2':'chapter 3',
-		'description':'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt',
-		'actors':'Keanu Reeves',
-		'year':'2019',
-		'length':'2h 10m',
-		'type':'Movie',
-		'img':'john-wick.jpg',
-		'tags':['hindi','comedy']
-	},
-	{
-		'title1': 'Black',
-		'title2':'panther',
-		'description':'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt',
-		'actors':'Keanu Reeves',
-		'year':'2018',
-		'length':'2h 14m',
-		'type':'web-series',
-		'img':'black-panther.jpg',
-		'tags':['action','superhero','hindi']
-	},
-	{
-		'title1': 'Dolittle',
-		'description':'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt',
-		'actors':'Robert Downey Jr.',
-		'year':'2018',
-		'length':'2h 14m',
-		'type':'web-series',
-		'img':'dolittle.jpg',
-		'tags':['hindi','comedy']
-	},
-	{
-		'title1': 'spiderman',
-		'title2':'homecoming',
-		'description':'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt',
-		'actors':'Tom Holland',
-		'year':'2017',
-		'length':'2h 13m',
-		'type':'movie',
-		'img':'spiderman.jpg',
-		'tags':['action','superhero','hindi']
-	},
-	{
-		'title1': 'john wick',
-		'title2':'chapter 3',
-		'description':'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt',
-		'actors':'Keanu Reeves',
-		'year':'2019',
-		'length':'2h 10m',
-		'type':'Movie',
-		'img':'john-wick.jpg',
-		'tags':['hindi','comedy']
-	},
-	{
-		'title1': 'Black',
-		'title2':'panther',
-		'description':'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt',
-		'actors':'Keanu Reeves',
-		'year':'2018',
-		'length':'2h 14m',
-		'type':'web-series',
-		'img':'black-panther.jpg',
-		'tags':['action','superhero','hindi']
-	}
-]
+export const MovieTypes = ['Movie','Tv']
 
-export const GalleryData = [
-	'gallery_01.jpg',
-	'gallery_02.jpg',
-	'gallery_03.jpg',
-	'gallery_04.jpg',
-	'gallery_05.jpg',
-	'gallery_06.jpg',
-	'gallery_07.jpg',
-	'gallery_08.jpg'
-]
+// UNSPLASH APIS
+const UNSPLASH_API_KEY = process.env.REACT_APP_UNSPLASH_API
+
+// TMDB APIS
+const API_KEY = process.env.REACT_APP_TMDB_API
+
+const API_IMG_URL = `https://image.tmdb.org/t/p/w500/`
+
+const TRENDING_MOVIE_URL = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`
+
+const TRENDING_SERIES_URL = `https://api.themoviedb.org/3/trending/tv/day?api_key=${API_KEY}`
+
+const SEARCH_URL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}`
+
+const GENRES_URL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`
+
+export { API_KEY, API_IMG_URL, TRENDING_MOVIE_URL, TRENDING_SERIES_URL, SEARCH_URL, GENRES_URL, UNSPLASH_API_KEY }

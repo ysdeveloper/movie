@@ -1,23 +1,18 @@
-import React, {Component} from 'react'
+import React from 'react'
 
-class Overlay extends Component {
-	render() {
-
-		const Style = {
-			overlay: {
-				background: this.props.bgColor,
-				position:'absolute',
-				width:'100%',
-				height: this.props.height ? this.props.height : '100%',
-				zIndex: '1',
-				opacity: this.props.opacity
-			}
+const Overlay = (props) => {
+	const Style = {
+		overlay: {
+			background: props.bgColor,
+			position:'absolute',
+			width: props.width ? props.width : '100%',
+			height: props.height ? props.height : '100%',
+			zIndex: props.zIndex ? props.zIndex : '1',
+			opacity: props.opacity
 		}
-
-		return(
-		<div className={this.props.className} style={Style.overlay}></div>
-		);
 	}
+
+	return <div className={props.className} style={Style.overlay}></div>
 }
 
 export default Overlay

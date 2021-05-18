@@ -1,87 +1,114 @@
 import React, {Component} from 'react'
-import {NavLink} from 'react-router-dom'
-import Swiper from 'react-id-swiper'
-import 'swiper/css/swiper.css'
+import {Link} from 'react-router-dom'
+import {TweenMax} from 'gsap'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import SwiperCore, { EffectCoverflow } from 'swiper'
+import AOS from 'aos';
+import ReactLoading from 'react-loading'
 
 // Components
-import { HamburgerIcon } from '../../components/icon'
-import Overlay from '../../components/overlay'
-import Button from '../../components/button'
-import MovieCard from '../../components/moviecard'
-import Gallery from '../../components/gallery'
+import { Header1 } from '../../components/header'
+import { Footer1 } from '../../components/footer'
+import {MovieCard, MovieList} from '../../components/moviecard'
 import VideoPlayer from '../../components/videoplayer'
 
 // Data
-import { MovieData } from '../../data'
+import { MovieTypes,TRENDING_MOVIE_URL, TRENDING_SERIES_URL, SEARCH_URL,API_KEY, GENRES_URL} from '../../data'
 
 // Styles
 import '../../css/movie_pages.css'
+import 'swiper/swiper.scss';
+import 'swiper/components/effect-coverflow/effect-coverflow.scss'
+import 'aos/dist/aos.css';
 
-// Swiper function
-const params = {
-	effect: 'coverflow',
-	grabCursor: true,
-	centeredSlides: true,
-	slidesPerView: '1',
-	coverflowEffect: {
-		rotate: 0,
-		stretch: -700,
-		depth: 1000,
-		modifier: 1,
-		slideShadows: false
-	}
-}
+SwiperCore.use([EffectCoverflow]);
 
 class MovieHomePage extends Component {
 	constructor() {
 		super()
+		this.moviecards = []
 		this.state = {
 			type: 'movie',
-			tag: 'action'
+			tag: 28,
+			genres: null,
+			filtered_movie: null,
+			trendingmovies: null,
+			trendingseries: null,
+			kungfupandaseries: null,
+			ironmanseries: null,
+			site: 'youtube',
+			trailer_key: '1d0Zf9sXlHk',
+			loading: true
 		}
 	}
 
 	// Movie List tags click function
-	handleTagsClick = (item,i) => {
-		return (
-			this.setState({
-				tag: item
-			})
-		);
+	handleTagsClick = (item) => {
+		if(this.state.tag !== item.id) {
+			this.setState({tag: item.id,loading: true})
+			fetch(`https://api.themoviedb.org/3/discover/${this.state.type}?api_key=${API_KEY}&with_genres=${item.id}`)
+			.then(result => result.json())
+			.then(data => this.setState({filtered_movie: data.results.slice(0,8), loading: false}))
+		}
 	}
 
 	// Movie List type click function
-	handleTypeClick = (item,i) => {
-		return (
-			this.setState({
-				type: item
-			})
-		);
+	handleTypeClick = (item) => {
+		if(this.state.type !== item.toLowerCase()) {
+			this.setState({type: item.toLowerCase(), loading: true})
+			fetch(`https://api.themoviedb.org/3/discover/${item.toLowerCase()}?api_key=${API_KEY}&with_genres=${this.state.tag}`)
+			.then(result => result.json())
+			.then(data => this.setState({filtered_movie: data.results.slice(0,8), loading: false}))
+		}
+	}
+
+	// Swiper Function Start
+	onSlideChange = (swiper) => {
+		var activeSlide = swiper.slides[swiper.realIndex] ;
+		TweenMax.to('.hero',1, {css: {background: activeSlide.getAttribute('data-bg')}})
+	}
+	// Swiper Function End
+
+	onMovieClick = (e,item) => {
+		fetch(`https://api.themoviedb.org/3/movie/${item.id}?api_key=${API_KEY}&append_to_response=videos`)
+		.then(result => result.json())
+		.then(data => data.videos.results.length ? this.setState({trailer_key:  data.videos.results[0].key}) : this.setState({trailer_key: '1d0Zf9sXlHk'}))
+
+		document.querySelectorAll('.media').forEach(function (item) {
+			item.classList.remove('active')
+		})
+		e.currentTarget.classList.add('active')
+	}
+
+	componentDidMount() {
+		fetch(TRENDING_MOVIE_URL)
+		.then(result => result.json())
+		.then(data => this.setState({trendingmovies: [...data.results]}))
+
+		fetch(TRENDING_SERIES_URL)
+		.then(result => result.json())
+		.then(data => this.setState({trendingseries: [...data.results]}))
+
+		fetch(`${SEARCH_URL}&query=kung+fu+panda`)
+		.then(result => result.json())
+		.then(data => this.setState({kungfupandaseries: [...data.results]}))
+
+		fetch(`${SEARCH_URL}&query=iron+man`)
+		.then(result => result.json())
+		.then(data => this.setState({ironmanseries: [...data.results]}))
+
+		fetch(GENRES_URL)
+		.then(result => result.json())
+		.then(data => this.setState({genres: [...data.genres]}))
+
+		fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=28`)
+		.then(result => result.json())
+		.then(data => this.setState({filtered_movie: data.results.slice(0,8), loading: false}))
 	}
 
 	render() {
-		// getting tags data from the movie data
-		const tagsdata = MovieData.map(item => item.tags)
-
-		// combine multiple tags array in one array
-		let i = 0,tot_tags = [];
-		for(i=0; i < tagsdata.length; i++) {
-			tot_tags = tot_tags.concat(tagsdata[i])
-		}
-
-		const edit_tags = tot_tags.map(item => item.toLowerCase())
-
-		// Remove the duplicate item from the tags array list
-		// FINAL TAG DATA
-		const filtered_tags = edit_tags.filter((item,i,self) => i === self.indexOf(item)).sort()
-
-		// FINAL TYPE DATA
-		const filtered_type = MovieData.map(item => item.type.toLowerCase()).filter((item,i,self) => i === self.indexOf(item))
-
-		// FILTERED MOVIEDATA (TAGS & TYPE WISE)
-		const filtered_moviedata_1 = MovieData.filter(item => item.type.toLowerCase().includes(this.state.type))
-		const filtered_moviedata_2 = filtered_moviedata_1.filter(item => item.tags.includes(this.state.tag))
-
+		AOS.init()
+		// STYLE
 		const Style = {
 			active: {
 				background: 'linear-gradient(#6900af,#330080)',
@@ -91,139 +118,113 @@ class MovieHomePage extends Component {
 				fontWeight: 700
 			}
 		}
-
+		
 		return (
-			<div className="position-absolute fixed-top z-index-10 w-100 bg-dark">
+			<div className="position-absolute fixed-top w-100 bg-dark" style={{zIndex: '10'}}>
 				{/* SECTION START */}
-				<section className="hero" style={{'background': 'linear-gradient(#2C013A,#AA014C)'}}>
+				<section className="hero" style={{background: 'linear-gradient(#2C013A,#AA014C)'}}>
+					{/* Swiper slider Circle Bg */}
+					<div className="big-circle"></div>
+					<div className="small-circle"></div>
+
 					{/*Header*/}
-					<header className="d-flex align-items-center justify-content-between px-4 py-2 position-absolute fixed-top w-100">
-						<div className="logo d-flex align-items-center">
-							<NavLink to="/">
-								<img src={require('../../img/logo.png')} height="40" width="40" alt="logo" />
-							</NavLink>
-						</div>
-						<div className="links">
-							<HamburgerIcon className="hamburger-style-1" bgColor="#f7f7f7" />
-						</div>
-					</header>
-					
-					{/* Swiper */}
-					<Swiper {...params} className="slider">
-						<div>
-							{/* <img className="position-absolute fixed-bottom z-index-10" src={require('../../img/spiderman.png')} alt="" width="500" height="auto" /> */}
-						</div>
-						<div data-bg={{'background': 'linear-gradient(#0075A5,#0B091D)' }}>
-							<img className="position-absolute fixed-bottom z-index-10" src={require('../../img/john_wick.png')} alt="" width="500" height="auto" />
-						</div>
-						<div data-bg={{'background': 'linear-gradient(#06172F,#000000)' }}>
-							<img className="position-absolute fixed-bottom z-index-10" src={require('../../img/black_panther.png')} alt="" width="500" height="auto" />
-						</div>
+					<Header1 />
+					<Swiper
+						slidesPerView={1}
+						onSlideChange={this.onSlideChange}>
+						<SwiperSlide className="d-flex justify-content-center align-items-end spider-man" data-bg="linear-gradient(#2C013A,#AA014C)">
+							<img className="charecter-img" src={require('../../img/spiderman_01.png')} alt="" width="500" height="auto" />
+							<h2 className="title1">spider</h2>
+							<h2 className="title2">man</h2>
+							<span className="subtitle">homecoming</span>
+						</SwiperSlide>
+						<SwiperSlide className="d-flex justify-content-center align-items-end john-wick" data-bg="linear-gradient(#0075A5,#0B091D)">
+							<img className="charecter-img" src={require('../../img/john_wick_01.png')} alt="" width="500" height="auto" />
+							<h2 className="title1" style={{left: '39%'}}>john</h2>
+							<h2 className="title2">wick</h2>
+							<span className="subtitle">chapter 3</span>
+						</SwiperSlide>
+						<SwiperSlide className="d-flex justify-content-center align-items-end black-panther" data-bg="linear-gradient(#06172F,#000000)">
+							<img className="charecter-img" src={require('../../img/black_panther_01.png')} alt="" width="600" height="auto" />
+							<h2 className="title1" style={{left: '37%'}}>Black</h2>
+							<h2 className="title2" style={{left: '67%'}}>panther</h2>
+							<span className="subtitle">chapter 3</span>
+						</SwiperSlide>
 					</Swiper>
 				</section>
 				{/* SECTION END */}
 
 				{/* SECTION START */}
-				<section className="movie-latest" style={{background: 'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(31,0,0,1) 51%, rgba(0,0,0,1) 100%)'}}>
-					<Overlay className="fixed-top" bgColor="linear-gradient(#000,#000,transparent)" opacity="1" height="200px" />
-					<Overlay className="fixed-bottom" bgColor="linear-gradient(transparent,#000)" opacity="1" height="150px" />
-					<div className="container">
-						<div className="row align-items-center">
-							<div className="col-6">
-								<div className="title mb-3">
-									<h2>Avengers</h2>
-									<p>end game</p>
-								</div>
-								<p className="text-white opacity-7">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-								<Button className="btn-style-2 btn-medium rounded" bgColor="linear-gradient(to left,rgba(255,0,0,1) 0%,transparent 50%,transparent 66%,rgba(255,0,0,1) 100%)" Color="#fff" icon="fa fa-play">Watch Demo</Button>
-							</div>
-							<div className="col-6">
-								<img className="opacity-4" alt="ironman" src={require('../../img/iron-man.png')} />
-							</div>
-						</div>
-					</div>
-				</section>
-				{/* SECTION END */}
-
-				{/* SECTION START */}
-				<section className="movie-list" style={{background: 'linear-gradient(90deg, rgba(19,0,58,1) 0%, rgba(9,9,9,1) 100%)'}}>
-					<Overlay className="fixed-top" height="120px" bgColor="linear-gradient(#000,transparent)" />
-					<div className="container-fluid py-5">
+				<section className="movie-list" style={{background: 'linear-gradient(90deg, rgba(19,0,58,1) 0%, rgba(9,9,9,1) 100%)' }}>
+					<div className="bg_circle"></div>
+					<div className="bg_circle" style={{top: '55%', left: '68%', opacity: 0.01}}></div>
+					<div className="container-fluid px-xl-5">
 						<div className="row">
-
-							<div className="col-12 mb-5 d-flex align-items-center justify-content-center">
+							<div className="col-12 mb-5 d-flex align-items-center justify-content-center" data-aos="fade-in" data-aos-delay="50" data-aos-once="true">
 								<ul className="list d-flex list-unstyled">
-									{
-										filtered_type.map((item,i) => {
+									{MovieTypes.map((item,i) => {
 											return(
-												<li className="list-item mr-5" key={i.toString()}>
-													<button className='text-white text-medium text-capitalize font-weight-600 bg-transparent letter-spacing-1px px-4 py-1 border-0' style={this.state.type === item ? Style.active : undefined} onClick={() => this.handleTypeClick(item,i)}>{item}</button>
+												<li className="list-item mr-5" key={i}>
+													<button 
+														className='text-white text-medium text-capitalize font-weight-600 bg-transparent letter-spacing-1px px-4 py-1 border-0' 
+														style={this.state.type === item.toLowerCase() ? Style.active : undefined} 
+														onClick={() => this.handleTypeClick(item)}>
+														{item}
+													</button>
 												</li>
 											);
 										})
 									}
 								</ul>
 							</div>
-
-							<div className="col-2">
-								<h2 className="text-large font-weight-700 text-white letter-spacing-1px mb-4">Categories</h2>
-								<ul className="list list-unstyled m-0">
-									{
-										filtered_tags.map((item,i) => {
+							<div className="col-3 col-lg-2 d-sm-block d-none" data-aos="fade-in" data-aos-delay="60" data-aos-once="true">
+								<h2 className="text-large font-weight-600 text-white letter-spacing-1px mb-4">Categories</h2>
+								<ul className="list list-unstyled m-0 scrollbar size-sm" style={{height: 400}}>
+									{this.state.genres ?
+										this.state.genres.map((item,i) => {
 											return (
-												<li className="list-item mb-1" key={i.toString()}>
-													<button className="text-medium text-white text-capitalize letter-spacing-1px bg-transparent border-0 pl-4 pr-5 py-1 no-outline" style={this.state.tag === item ? Style.active : undefined} onClick={() => this.handleTagsClick(item,i)}>{item}</button>
+												<li className="list-item mb-1" key={i}>
+													<button
+														className="text-medium text-white text-capitalize letter-spacing-1px bg-transparent border-0 pl-3 pr-3 py-1 no-outline text-left" 
+														style={this.state.tag === item.id ? Style.active : undefined} 
+														onClick={() => this.handleTagsClick(item)}>{item.name}
+													</button>
 												</li>
 											);
-										})
+										}) : undefined
 									}
-								</ul>
+								</ul>	
 							</div>
-
-							<div className="col-8">
-								<Gallery className="gallery-1">
-									{
-										filtered_moviedata_2.map((item,i) => {
-											return(
-												<MovieCard 
-													key={i}
-													className="moviecard-1 card"
-													data={item}
-												/>
-											);
-										})
-									}
-								</Gallery>
+							<div className="col-xl-8 col-lg-10 col-sm-9 col-12 d-flex flex-wrap sm-px-1 px-0" data-aos="fade-in" data-aos-duration="1000" data-aos-once="true">
+								{this.state.loading ?
+									<ReactLoading type='bubbles' color='#6900af' height={100} width={150} />
+									: 
+									this.state.filtered_movie.map((item,i) => {
+										return <div ref={div => this.moviecards[i] = div} className="col-6 col-sm-4 col-lg-3 mb-3" key={i}><Link to={`/movie/${item.id}`}><MovieCard className="moviecard-1 rounded" data={item} /></Link></div>
+									})
+								}
 							</div>
-
 						</div>
 					</div>
 				</section>				
 				{/* SECTION END */}	
 
 				{/* SECTION START */}
-				<section style={{background: 'linear-gradient(90deg, rgba(19,0,58,1) 0%, rgba(9,9,9,1) 100%)'}}>
-					<div className="container">
+				<section className="lg-py-0px" style={{background: 'linear-gradient(90deg, rgba(19,0,58,1) 0%, rgba(9,9,9,1) 100%)'}}>
+					<div className="container-fluid px-xl-5">
 						<div className="row justify-content-center">
-							<div className="col-9">
-								<div className="row">
-									<div className="col-8">
-										// video Player Will come Here
+							<h5 className="col-12 col-lg-10 col-xl-8 text-white mb-4 font-weight-500" data-aos="fade-in" data-aos-duration="1000">Trailers & Videos</h5>
+							<div className="col-12 col-lg-10 col-xl-8">
+								<div className="row justify-content-center">
+									<div className="col-12 col-sm-8 mb-3 sm-mb-0" data-aos="fade-in" data-aos-duration="1000">
+										<VideoPlayer 
+											height="320px"
+											url={`https://www.youtube.com/watch?v=${this.state.trailer_key}`} 
+											themecolor="#fff"
+											site="youtube"/>
 									</div>
-									<div className="col-4 overflow-auto hide-scrollbar" style={{height: 250}}>
-										{
-											MovieData.map((item,i) => {
-												return(
-													<div key={i} className="media mb-3">
-													  <img className="mr-3 rounded box-shadow-light" src={require(`../../img/${item.img}`)} alt={item.title1} height="50" width="50" />
-													  <div className="media-body">
-													    <h5 className="mt-0 text-white text-medium">{`${item.title1} ${item.title2}`}</h5>
-													    
-													  </div>
-													</div>
-												);
-											})
-										}
+									<div className="col-12 col-sm-4 scrollbar size-sm" style={{height: 315}} data-aos="fade-in" data-aos-duration="1000" data-aos-delay="100" data-aos-once="true" >
+										{this.state.trendingmovies ? this.state.trendingmovies.map((item,i) => <MovieList key={i} data={item} onClick={(e) => this.onMovieClick(e,item)}/>) : undefined}
 									</div>
 								</div>
 							</div>
@@ -231,7 +232,158 @@ class MovieHomePage extends Component {
 					</div>
 				</section>
 				{/* SECTION END */}
-			</div>	
+
+				{/* SECTION START */}
+				<section style={{background: 'linear-gradient(90deg, rgba(19,0,58,1) 0%, rgba(9,9,9,1) 100%)'}}>
+					<div className="container-fluid px-5 sm-px-0px">
+					<div className="row mb-5 justify-content-end overflow-hidden position-relative" data-aos="fade-in" data-aos-once="true" style={{background: 'linear-gradient(to right, #16070a, #010101)', borderRadius:'20px', backgroundSize: 'cover'}}>
+							<img
+								style={{position: 'absolute',left:-60,top:'50%',transform: 'translateY(-50%)'}} 
+								src={require('../../img/iron_man_statue.png')} alt="iron-man" width="700" className="d-none d-sm-block" />
+							<div className="col-12 py-4 sm-px-15px" data-aos="fade-in" data-aos-once="true">
+								<Swiper
+									effect="coverflow"
+									slidesPerView={2}
+									spaceBetween={25}
+									centeredSlides={false}
+									coverflowEffect={{rotate: 0, depth: 100,slideShadows: false}}
+									breakpoints={{
+										768: {
+										  slidesPerView: 3,
+										  centeredSlides: true
+										},
+										991: {
+										  slidesPerView: 4,
+										},
+										1200: {
+											slidesPerView: 6,
+										},
+									  }}
+									>
+									{this.state.ironmanseries !== null ? 
+										this.state.ironmanseries.map((item,i) => {
+											return <SwiperSlide key={i}><Link to={`/movie/${item.id}`}><MovieCard className="moviecard-2 rounded" themecolor='#150709' data={item} /></Link></SwiperSlide>
+										}) : undefined
+									}
+								</Swiper>
+							</div>
+						</div>
+						<h5 className="text-white mb-3 sm-px-15px font-weight-500" data-aos="fade-in" data-aos-once="true">Trending Movies</h5>
+						<div className="row mb-5 sm-px-25px" data-aos="fade-in" data-aos-once="true">
+							<Swiper
+								slidesPerView={2}
+								slidesPerGroup={2}
+								spaceBetween={15}
+								centeredSlides={false}
+								breakpoints= {{
+									768: {
+										slidesPerView: 3,
+										slidesPerGroup: 3,
+										spaceBetween: 30
+									},
+									991: {
+										slidesPerView: 4,
+										slidesPerGroup: 4
+									},
+									1200: {
+										slidesPerView: 6,
+										slidesPerGroup: 6
+									},
+								}}
+								>
+								{this.state.trendingmovies !== null ? 
+									this.state.trendingmovies.map((item,i) => {
+										return <SwiperSlide key={i}><Link to={`/movie/${item.id}`}><MovieCard className="moviecard-2 rounded" themecolor='#13003a' data={item} /></Link></SwiperSlide>
+									}) : undefined
+								}
+							</Swiper>
+						</div>
+						<div className="row mb-5 justify-content-end overflow-hidden position-relative" data-aos="fade-in" data-aos-once="true" style={{background: 'linear-gradient(to right, #00b606, #00c195)', borderRadius:'20px', backgroundSize: 'cover'}}>
+							<img 
+								style={{position: 'absolute',left:0,top:'50%',transform: 'translateY(-50%)'}}
+								src={require(`../../img/kung-fu-panda-statue.png`)} alt="kung-fu panda Series" width="600" className="d-none d-sm-block" />
+							<div className="col-12 py-4 sm-px-15px">
+								<Swiper
+									effect="coverflow"
+									slidesPerView={2}
+									spaceBetween={25}
+									centeredSlides={false}
+									coverflowEffect={{rotate: 0, depth: 100,slideShadows: false}}
+									breakpoints= {{
+										768: {
+											slidesPerView: 3,
+											slidesPerGroup: 3,
+											centeredSlides: true
+										},
+										991: {
+											slidesPerView: 4,
+											slidesPerGroup: 4
+										},
+										1200: {
+											slidesPerView: 6,
+											slidesPerGroup: 6
+										},
+									}}
+									>
+									{this.state.kungfupandaseries !== null ? 
+										this.state.kungfupandaseries.map((item,i) => {
+											return (
+												<SwiperSlide key={i}><Link to={`/movie/${item.id}`}>
+													<MovieCard className="moviecard-2 rounded" themecolor='#000' data={item} />
+													</Link>
+												</SwiperSlide>
+											);
+										})
+										: undefined
+									}
+								</Swiper>
+							</div>
+						</div>
+						<h5 className="text-white mb-3 font-weight-500 sm-px-15px">Trending Tv-Series</h5>
+						<div className="row mb-5 sm-px-25px">
+							<Swiper
+								effect="coverflow"
+								slidesPerView={2}
+								slidesPerGroup={2}
+								spaceBetween={15}
+								centeredSlides={false}
+								coverflowEffect={{rotate: 0, depth: 10, slideShadows: false}}
+								breakpoints= {{
+									768: {
+										slidesPerView: 3,
+										slidesPerGroup: 3,
+										spaceBetween: 30
+									},
+									991: {
+										slidesPerView: 4,
+										slidesPerGroup: 4
+									},
+									1200: {
+										slidesPerView: 6,
+										slidesPerGroup: 6
+									},
+								}}
+								>
+								{this.state.trendingseries !== null ? 
+									this.state.trendingseries.map((item,i) => {
+										return (
+											<SwiperSlide key={i}><Link to={`/movie/${item.id}`}>
+												<MovieCard className="moviecard-2 rounded" themecolor='#13003a' data={item} />
+												</Link>
+											</SwiperSlide>
+										);
+									})
+									: undefined
+								}
+							</Swiper>
+						</div>
+					</div>
+				</section>
+				{/* SECTION END */}
+				{/* FOOTER START */}
+				<Footer1 />
+				{/* FOOTER END */}
+			</div>
 		)
 	}
 }

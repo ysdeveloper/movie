@@ -1,7 +1,7 @@
 import React from 'react'
 
 // Components
-import Searchbar from '../components/searchbar'
+import {Searchbar} from '../components/searchbar'
 
 function SearchbarPage() {
 	return(
@@ -30,7 +30,7 @@ function SearchbarPage() {
 					placeholder="Search"
 				/>
 			</div>
-		{/* =================Searchbar Rounded=================*/}
+			{/* =================Searchbar Rounded=================*/}
 			<div className="col-4 py-40px">
 				<div>
 					<h6 className="title" style={{color: "#6900af", marginBottom: 10}}>Searchbar Rounded</h6>
@@ -41,13 +41,25 @@ function SearchbarPage() {
 					placeholder="Search"
 				/>
 			</div>
-		{/* =================Searchbar Style 1=================*/}
+			{/* =================Searchbar Style 1=================*/}
 			<div className="col-4 py-40px">
 				<div>
 					<h6 className="title" style={{color: "#6900af", marginBottom: 10}}>Searchbar Style 1</h6>
 				</div>
 				<Searchbar
 					className="searchbar-style-1"
+					focusColor="#ed5e86"
+					placeholder="Search"
+				/>
+			</div>
+			{/* =================Searchbar rounded bg =================*/}
+			<div className="col-4 py-40px">
+				<div>
+					<h6 className="title" style={{color: "#6900af", marginBottom: 10}}>Searchbar Rounded bg</h6>
+				</div>
+				<Searchbar
+					className="rounded"
+					background="#f7f7f7"
 					focusColor="#ed5e86"
 					placeholder="Search"
 				/>
