@@ -1,7 +1,6 @@
 {
   "name": "my",
   "version": "0.1.0",
-  "homepage": "http://darkwarrior303.github.io/react_theme",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
